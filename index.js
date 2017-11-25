@@ -8,7 +8,9 @@ class MathGame {
     this.answerKeys = '0123456789'.split('');
     this.answer = '';
     this.SCORE_PLUS = 10;
-    this.score = 0;
+    this.score = parseInt(window.localStorage.getItem('score')) ||  0;
+    this.MIN_NUMBER = 1;
+    this.MAX_NUMBER = 10;
 
   }
 
@@ -24,7 +26,7 @@ class MathGame {
 
   nextChallenge() {
     this.answer = '';
-    this.challenge = this.generator.generate();
+    this.challenge = this.generator.generate(this.MIN_NUMBER, this.MAX_NUMBER);
     this.renderChallenge();
     this.renderAnswer();
   }
@@ -49,6 +51,7 @@ class MathGame {
 
   updateScore(addition) {
     this.score += addition;
+    window.localStorage.setItem('score', this.score);
     this.renderScore();
   }
 

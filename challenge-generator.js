@@ -4,22 +4,21 @@
 
 class ChallengeGenerator {
   constructor() {
-    this.MAX_NUMBER = 10;
   }
 
-  getRandomNumber() {
-    return Math.floor(Math.random() * this.MAX_NUMBER);
+  getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  getText(a, b) {
-    return `${a} + ${b} = `;
+  getText(a, b, op) {
+    return `${a} ${op} ${b} = `;
   }
 
-  generate() {
-    const a = this.getRandomNumber(),
-          b = this.getRandomNumber(),
-          text = this.getText(a, b),
-          result = a + b;
+  generate(min , max, op = '+') {
+    const a = this.getRandomNumber(min, max),
+          b = this.getRandomNumber(min, max),
+          text = this.getText(a, b, op),
+          result = eval(`${a} ${op} ${b}`);
     return {
       a,
       b,
