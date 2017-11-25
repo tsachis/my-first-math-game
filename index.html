@@ -2,17 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Char Catcher</title>
+  <title>Math Game</title>
+  <link href="https://fonts.googleapis.com/css?family=Londrina+Shadow|Quantico" rel="stylesheet">
+  <link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-default.css" />
+  <script src="http://github.hubspot.com/odometer/odometer.js"></script>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div class="container">
     <div class="panel">
-      <div class="score"></div>
-      <div class="level"></div>
+      <div class="odometer"></div>
     </div>
-    <div class="game"></div>
+    <div class="game">
+      <div class="challenge"></div>
+      <div class="challenge-answer"></div>
+      <div class="thumbsup">👍</div>
+    </div>
   </div>
+  <script src="challenge-generator.js"></script>
   <script src="index.js"></script>
 </body>
 </html>
