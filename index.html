@@ -12,10 +12,16 @@
   <div class="container">
     <div class="panel">
       <div class="odometer"></div>
+      <div class="operator">
+        <button onclick="mathGame.changeOp('+')">+</button>
+        <button onclick="mathGame.changeOp('-')">-</button>
+      </div>
     </div>
     <div class="game">
       <div class="challenge"></div>
-      <div class="challenge-answer"></div>
+      <div class="challenge-answer">
+        <input type="number" onblur="mathGame.checkAnswer(this.value)" />
+      </div>
       <div class="thumbsup">👍</div>
     </div>
   </div>

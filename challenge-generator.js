@@ -16,7 +16,7 @@ class ChallengeGenerator {
 
   generate(min , max, op = '+') {
     const a = this.getRandomNumber(min, max),
-          b = this.getRandomNumber(min, max),
+          b = op === '-' ? this.getRandomNumber(min, a) : this.getRandomNumber(min, max),
           text = this.getText(a, b, op),
           result = eval(`${a} ${op} ${b}`);
     return {

@@ -5,43 +5,52 @@
 class MathGame {
   constructor() {
     this.generator = new ChallengeGenerator();
-    this.answerKeys = '0123456789'.split('');
-    this.answer = '';
     this.SCORE_PLUS = 10;
+    this.SCORE_MINUS = -2;
     this.score = parseInt(window.localStorage.getItem('score')) ||  0;
     this.MIN_NUMBER = 1;
     this.MAX_NUMBER = 10;
+    this.op = '+';
+    this.lastAnswer = '';
 
   }
 
   run() {
     this.nextChallenge();
     this.renderScore();
-    document.addEventListener('keyup', this.handleKeyPress.bind(this), false);
   }
 
   renderChallenge() {
     document.querySelector('.challenge').innerHTML = `${this.challenge.text}`;
   }
 
-  nextChallenge() {
-    this.answer = '';
-    this.challenge = this.generator.generate(this.MIN_NUMBER, this.MAX_NUMBER);
-    this.renderChallenge();
-    this.renderAnswer();
+  clearAndFocusAnswer() {
+    const answerInput = document.querySelector('.challenge-answer input');
+    answerInput.value = '';
+    setTimeout(() => answerInput.focus());
   }
 
-  renderAnswer() {
-    document.querySelector('.challenge-answer').innerHTML = this.answer;
+  nextChallenge() {
+    this.lastAnswer = '';
+    this.challenge = this.generator.generate(this.MIN_NUMBER, this.MAX_NUMBER, this.op);
+    this.renderChallenge();
+    this.clearAndFocusAnswer();
   }
+
 
   checkAnswer(currentAnswer) {
-    if (this.challenge.result === parseInt(currentAnswer)) {
+    currentAnswer = parseInt(currentAnswer);
+    if (this.challenge.result === currentAnswer) {
       this.playSuccessSound();
       this.showSuccessAnimation().then(() => {
         this.updateScore(this.SCORE_PLUS);
         this.nextChallenge();
       });
+    } else {
+      if (currentAnswer && currentAnswer != this.lastAnswer) {
+        this.lastAnswer = currentAnswer;
+        this.updateScore(this.SCORE_MINUS);
+      }
     }
   }
 
@@ -60,31 +69,22 @@ class MathGame {
   }
 
   showSuccessAnimation() {
-    const promise = new Promise((resolve) => {
+    return new Promise((resolve) => {
       document.querySelector('.thumbsup').classList.add('show');
       setTimeout(() => {
         document.querySelector('.thumbsup').classList.remove('show');
         resolve();
       }, 500);
     });
-    return promise;
   }
 
-  handleKeyPress(event) {
-    if (this.answerKeys.indexOf(event.key) >= 0 || event.keyCode === 8) {
-      if (this.answerKeys.indexOf(event.key) >= 0) {
-        this.answer += event.key;
-      }
-      if (event.keyCode === 8 && this.answer) {
-        this.answer = this.answer.slice(0, -1);
-      }
-      this.renderAnswer();
-      setTimeout(this.checkAnswer.bind(this, this.answer), 200);
+  changeOp(newOp) {
+    if (this.op !== newOp) {
+      this.op = newOp;
+      this.nextChallenge();
     }
   }
 }
 
-(function() {
-  const mathGame = new MathGame();
-  mathGame.run();
-})();
+window.mathGame = new MathGame();
+mathGame.run();
