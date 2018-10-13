@@ -8,8 +8,24 @@ class MathGame {
     this.SCORE_PLUS = 10;
     this.SCORE_MINUS = -2;
     this.score = parseInt(window.localStorage.getItem('score')) ||  0;
-    this.MIN_NUMBER = 1;
-    this.MAX_NUMBER = 10;
+    this.RANGES =  {
+      '+': {
+        min: 1,
+        max: 20
+      },
+      '-': {
+        min: 1,
+        max: 20
+      },
+      '*': {
+        min: 1,
+        max: 10
+      },
+      ':': {
+        min: 1,
+        max: 7
+      }
+    };
     this.op = '+';
     this.lastAnswer = '';
 
@@ -32,7 +48,8 @@ class MathGame {
 
   nextChallenge() {
     this.lastAnswer = '';
-    this.challenge = this.generator.generate(this.MIN_NUMBER, this.MAX_NUMBER, this.op);
+    const range = this.RANGES[this.op];
+    this.challenge = this.generator.generate(range.min, range.max, this.op);
     this.renderChallenge();
     this.clearAndFocusAnswer();
   }
@@ -78,10 +95,18 @@ class MathGame {
     });
   }
 
-  changeOp(newOp) {
+  changeOp(newOp, elm) {
     if (this.op !== newOp) {
       this.op = newOp;
+      document.querySelector('.btn-op-selected').classList.remove('btn-op-selected');
+      elm.classList.add('btn-op-selected');
       this.nextChallenge();
+    }
+  }
+
+  onAnswerKeyUp(event, elm) {
+    if (event.keyCode === 13) {
+      this.checkAnswer(elm.value);
     }
   }
 }

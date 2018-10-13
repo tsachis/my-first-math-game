@@ -14,11 +14,41 @@ class ChallengeGenerator {
     return `${a} ${op} ${b} = `;
   }
 
+  getResult(a, b, op) {
+    switch (op) {
+      case '-':
+        return a - b;
+      case '*':
+        return a * b;
+      case ':':
+      case '/':
+        return a / b;
+      default:
+        return a + b;
+    }
+  }
+
+  getNumbers(min, max, op = '+') {
+    let a = this.getRandomNumber(min, max);
+    let b;
+    if (op === '+' || op === '*') {
+      b = this.getRandomNumber(min, max);
+    } else if (op === '-') {
+      b = this.getRandomNumber(min, a);
+    } else {
+      b = this.getRandomNumber(min, a);
+      a *= b;
+    }
+    return {
+      a,
+      b
+    }
+  }
+
   generate(min , max, op = '+') {
-    const a = this.getRandomNumber(min, max),
-          b = op === '-' ? this.getRandomNumber(min, a) : this.getRandomNumber(min, max),
+    const { a, b } = this.getNumbers(min, max, op),
           text = this.getText(a, b, op),
-          result = eval(`${a} ${op} ${b}`);
+          result = this.getResult(a, b, op);
     return {
       a,
       b,
